@@ -1,6 +1,7 @@
 module Toy.Expression where
 
 import Data.Tuple
+import Data.Maybe
 import Data.Foldable
 
 type Id = String
@@ -33,12 +34,8 @@ pretty (App e1 e2) = paren true e1 ++ " " ++ paren false e2
     paren true e@(App _ _) = pretty e
     paren _ e = "(" ++ pretty e ++ ")"
 
-isValue :: Expr -> Boolean
-isValue (App (Abs _ _) _) = false
-isValue _ = true
-
-stepEval :: Expr -> Expr
-stepEval (App (Abs x e) e') = replace x e' e
+stepEval :: Expr -> Maybe Expr
+stepEval (App (Abs x e) e') = Just $ replace x e' e
   where
     replace :: Id -> Expr -> Expr -> Expr
     replace x e = go
@@ -46,6 +43,7 @@ stepEval (App (Abs x e) e') = replace x e' e
         go v@(Var y) = if x == y then e else v
         go (App e' e'') = App (go e') (go e'')
         go (Abs y e') = Abs y (go e') -- FIXME: avoid capture
-stepEval e = e
+stepEval (App e e') = (\e'' -> App e'' e') <$> stepEval e
+stepEval _ = Nothing
 
 
