@@ -13,8 +13,8 @@ diverge = App xToXX xToXX
   where
     xToXX = Abs "x" (App (Var "x") (Var "x"))
 
-interactiveEval :: forall e. Expr -> Eff (trace :: Trace | e) Unit
-interactiveEval e = do
+traceEval :: forall e. Expr -> Eff (trace :: Trace | e) Unit
+traceEval e = do
   trace "Starting evaluation:"
   trace $ "0    " ++ show e
   go 1 e
@@ -27,4 +27,4 @@ interactiveEval e = do
           trace $ show n ++ " => " ++ show next
           go (n+1) next
 
-main = interactiveEval term1
+main = traceEval term1
