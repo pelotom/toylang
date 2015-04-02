@@ -1,0 +1,17 @@
+{
+  "name": "toylang",
+  "version": "1.0.0",
+  "moduleType": [
+    "node"
+  ],
+  "dependencies": {
+    "purescript-tuples": "^0.3.4",
+    "purescript-foldable-traversable": "^0.3.1"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "output"
+  ]
+}
