@@ -17,14 +17,14 @@ diverge = App xToXX xToXX
 traceEval :: forall e. Expr -> Eff (trace :: Trace | e) Unit
 traceEval e = do
   trace "Starting evaluation:"
-  trace $ "0    " ++ show e
+  trace $ "0     " ++ show e
   go 1 e
   trace "Finished evaluating."
     where
       go :: forall e. Number -> Expr -> Eff (trace :: Trace | e) Unit
       go n e = do
         maybe (return unit) (\next -> do
-            trace $ show n ++ " => " ++ show next
+            trace $ show n ++ " ==> " ++ show next
             go (n+1) next
           ) (stepEval e)
 
