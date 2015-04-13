@@ -6,13 +6,31 @@ import Control.Monad
 import Control.Monad.Eff
 import Debug.Trace
 
-term1 :: Expr
-term1 = App (Abs "f" (App (Var "f") (Var "z"))) (App (Abs "g" (App (Var "g") (Var "g"))) (Abs "x" $ Var "x"))
+v0 :: Expr
+v0 = Var 0
+
+v1 :: Expr
+v1 = Var 1
+
+v2 :: Expr
+v2 = Var 2
+
+testExpr :: Expr
+testExpr = App (Abs $ App v0 v2) (App (Abs $ App v0 v0) (Abs $ v1))
 
 diverge :: Expr
-diverge = App xToXX xToXX
+diverge = App (Abs $ App v0 v0) (Abs $ App v0 v0)
+
+idExpr :: Expr
+idExpr = Abs $ Var 0
+
+y :: Expr
+y = Abs $ App foo foo
   where
-    xToXX = Abs "x" (App (Var "x") (Var "x"))
+    foo = Abs $ App v1 (App v0 v0)
+
+diverge2 :: Expr
+diverge2 = App y idExpr
 
 traceEval :: forall e. Expr -> Eff (trace :: Trace | e) Unit
 traceEval e = do
@@ -28,4 +46,4 @@ traceEval e = do
             go (n+1) next
           ) (stepEval e)
 
-main = traceEval term1
+main = traceEval testExpr
