@@ -10,13 +10,6 @@ data Expr = Var Idx
           | Abs Expr
           | App Expr Expr
 
-instance eqExpr :: Eq Expr where
-  (==) (Var x) (Var y) = x == y
-  (==) (Abs e1) (Abs e2) = e1 == e2
-  (==) (App a1 b1) (App a2 b2) = a1 == a2 && b1 == b2
-  (==) _ _ = false
-  (/=) e1 e2 = not $ e1 == e2
-
 instance showExpr :: Show Expr where
   show (Var x) = show x
   show (Abs e) = "# " ++ show e
