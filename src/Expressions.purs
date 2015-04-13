@@ -19,18 +19,15 @@ instance showExpr :: Show Expr where
       paren true e@(App _ _) = show e
       paren _ e = "(" ++ show e ++ ")"
 
--- Substitute e1 for index i in e2
-subst :: Expr -> Idx -> Expr -> Expr
-subst e = go
-  where
-    go i v@(Var j) = if i == j then e else v
-    go i (App e1 e2) = App (go i e1) (go i e2)
-    go i (Abs e') = Abs (go (i + 1) e')
-
 -- Evaluate an expression by a single step, if possible
 stepEval :: Expr -> Maybe Expr
-stepEval (App (Abs a) b) = Just $ subst b 0 a
+stepEval (App (Abs a) b) = Just $ subst 0 a
+  where
+    -- Substitute b for the given index in an expression
+    subst :: Idx -> Expr -> Expr
+    subst i v@(Var j) = if i == j then b else v
+    subst i (App e1 e2) = App (subst i e1) (subst i e2)
+    subst i (Abs e') = Abs (subst (i + 1) e')
 stepEval (App a b) = flip App b <$> stepEval a
 stepEval _ = Nothing
-
 

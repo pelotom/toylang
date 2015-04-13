@@ -32,6 +32,9 @@ y = Abs $ App foo foo
 diverge2 :: Expr
 diverge2 = App y idExpr
 
+testExpr2 :: Expr
+testExpr2 = Abs (App (Abs (Abs (App v1 v1))) v0)
+
 traceEval :: forall e. Expr -> Eff (trace :: Trace | e) Unit
 traceEval e = do
   trace "Starting evaluation:"
@@ -46,4 +49,4 @@ traceEval e = do
             go (n+1) next
           ) (stepEval e)
 
-main = traceEval testExpr
+main = traceEval testExpr2
