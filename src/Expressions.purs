@@ -27,7 +27,6 @@ pretty e@(Abs _ _) = case stripBoundVars e of
     stripBoundVars (Abs x e) = case stripBoundVars e of
       Tuple xs e' -> Tuple (x : xs) e'
     stripBoundVars e = Tuple [] e
-    
 pretty (App e1 e2) = paren true e1 ++ " " ++ paren false e2
   where
     paren _ (Var x) = x
